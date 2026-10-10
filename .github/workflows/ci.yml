@@ -1,0 +1,26 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: {POSTGRES_USER: ilm, POSTGRES_PASSWORD: ilm, POSTGRES_DB: warehouse}
+        ports: ["5433:5432"]
+        options: >-
+          --health-cmd "pg_isready -U ilm" --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: "17"}
+      - run: pip install -e '.[dev]'
+      - run: ruff check .
+      - run: pytest -q
+      - name: dbt parse
+        run: cd warehouse && dbt parse --profiles-dir .
+        env: {PGHOST: 127.0.0.1, PGPORT: "5433", PGUSER: ilm, PGPASSWORD: ilm, PGDATABASE: warehouse}

@@ -1,0 +1,38 @@
+# dbt project for the India last-mile delivery warehouse (PostgreSQL).
+# Layers: raw (ingest-owned, TEXT) -> staging (typed views) -> intermediate (flags, dedup) -> analytics (star schema).
+name: ilm_warehouse
+version: "1.0.0"
+config-version: 2
+profile: ilm
+model-paths: [models]
+macro-paths: [macros]
+seed-paths: [seeds]
+test-paths: [tests]
+clean-targets: [target, dbt_packages]
+
+vars:
+  # India bounding box (docs/CONTRACTS.md section 4); same values as ingest.geo.INDIA_BBOX
+  india_lat_min: 6.0
+  india_lat_max: 37.5
+  india_lon_min: 68.0
+  india_lon_max: 97.5
+  # delivery_minutes must be in (0, max_delivery_minutes]
+  max_delivery_minutes: 300
+  # incremental fct reprocesses this many days before the latest loaded order_date (late arrivals)
+  incremental_lookback_days: 3
+
+models:
+  ilm_warehouse:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: table
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: analytics
+
+seeds:
+  ilm_warehouse:
+    +schema: staging

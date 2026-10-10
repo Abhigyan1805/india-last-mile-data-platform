@@ -1,0 +1,22 @@
+Metadata-Version: 2.4
+Name: india-last-mile-data-platform
+Version: 0.1.0
+Summary: Intra-city delivery data platform for Indian cities (Airflow, dbt, PostgreSQL, PySpark, Kafka)
+Requires-Python: <3.13,>=3.12
+Requires-Dist: pandas==3.0.6
+Requires-Dist: numpy==2.5.3
+Requires-Dist: pyarrow==26.0.0
+Requires-Dist: scipy==1.18.1
+Requires-Dist: psycopg2-binary==2.9.13
+Requires-Dist: sqlalchemy==2.0.54
+Requires-Dist: requests==2.34.2
+Requires-Dist: pyyaml==6.0.3
+Requires-Dist: pyspark==3.5.9
+Requires-Dist: dbt-core==1.12.5
+Requires-Dist: dbt-postgres==1.11.0
+Requires-Dist: kafka-python-ng==2.2.3
+Provides-Extra: dev
+Requires-Dist: ruff==0.17.0; extra == "dev"
+Requires-Dist: pytest==9.1.1; extra == "dev"
+Requires-Dist: pgserver==0.1.4; extra == "dev"
+Requires-Dist: setuptools<81; extra == "dev"

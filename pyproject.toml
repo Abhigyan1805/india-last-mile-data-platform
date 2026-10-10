@@ -1,0 +1,32 @@
+[project]
+name = "india-last-mile-data-platform"
+version = "0.1.0"
+description = "Intra-city delivery data platform for Indian cities (Airflow, dbt, PostgreSQL, PySpark, Kafka)"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "pandas==3.0.6", "numpy==2.5.3", "pyarrow==26.0.0", "scipy==1.18.1",
+  "psycopg2-binary==2.9.13", "sqlalchemy==2.0.54", "requests==2.34.2", "pyyaml==6.0.3",
+  "pyspark==3.5.9", "dbt-core==1.12.5", "dbt-postgres==1.11.0", "kafka-python-ng==2.2.3",
+]
+
+[project.optional-dependencies]
+dev = ["ruff==0.17.0", "pytest==9.1.1", "pgserver==0.1.4", "setuptools<81"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".venv", ".tools", "warehouse/target"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["ingest*", "warehouse*", "spark*", "streaming*", "orchestration*"]
