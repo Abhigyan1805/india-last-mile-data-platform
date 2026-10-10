@@ -19,7 +19,7 @@ schema in `analytics`: `fct_deliveries` plus `dim_courier`, `dim_pincode_zone`, 
   "rows caught" and "rows used".
 
 ## Incremental model
-`fct_deliveries` is incremental (`unique_key` = order key): a normal run only processes new/changed rows;
+`fct_deliveries` is incremental (`unique_key` = `delivery_key`, merge strategy): a normal run only processes new/changed rows;
 `--full-refresh` rebuilds it.
 
 ## Run on the tiny fixture (no full dataset)
@@ -40,7 +40,7 @@ Fixture result: dbt build PASS=48 WARN=4 ERROR=0; quality runner flags e.g. 9 of
    changed rows, handled by `unique_key` (merge/delete+insert) and a periodic `--full-refresh`.
 4. **Why are DQ tests `warn` and not `error`?** Real public data is dirty; the goal is to count and report
    problems, and let clean rows flow. Structural tests (not_null keys, relationships) still fail the build.
-5. **How do you detect bad coordinates?** A bounding box for India (lat ~6–37.5, lon ~68–98) in one macro,
+5. **How do you detect bad coordinates?** A bounding box for India (lat ~6–37.5, lon ~68–97.5) in one macro,
    `in_india_bbox`; also NULL coordinates count as not valid.
 6. **How do you make the quality numbers trustworthy?** They are counted by SQL over the actual run, stored
    with run_id and timestamp, and the same macro defines the rule for the dbt test and the runner.
