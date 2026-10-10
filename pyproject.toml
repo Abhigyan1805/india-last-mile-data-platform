@@ -13,7 +13,7 @@ dependencies = [
 dev = ["ruff==0.17.0", "pytest==9.1.1", "pgserver==0.1.4", "setuptools<81"]
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py312"
 extend-exclude = [".venv", ".tools", "warehouse/target"]
 

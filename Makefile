@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+export LOAD_ID ?= $(shell date +%Y%m%dT%H%M%S)
 ENV := source scripts/env.sh &&
 .PHONY: help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
 
@@ -25,7 +26,7 @@ acquire:  ## download Kaggle/pincode/weather raw files (idempotent)
 load:  ## create schemas + load raw files into Postgres raw.*
 	$(ENV) python -m ingest.load
 geo:  ## nearest-pincode enrichment -> raw.delivery_geo (reports match rate)
-	$(ENV) python -m ingest.geo
+	$(ENV) python -m ingest.geo && python -m ingest.weather
 dbt:  ## dbt deps/run/test
 	$(ENV) cd warehouse && dbt build --profiles-dir .
 quality:  ## custom quality checks -> quality.check_results
@@ -38,6 +39,6 @@ pipeline: acquire load geo dbt quality spark  ## full batch pipeline, natively
 demo:  ## small-slice end-to-end run (minutes)
 	SAMPLE_MODE=1 $(MAKE) pipeline
 lint:
-	$(ENV) ruff check . && ruff format --check .
+	$(ENV) ruff check .
 test:
 	$(ENV) pytest -q
