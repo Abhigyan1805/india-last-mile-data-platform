@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 export LOAD_ID ?= $(shell date +%Y%m%dT%H%M%S)
 ENV := source scripts/env.sh &&
-.PHONY: help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
+.PHONY: e2e help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
 
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | sed 's/:.*##/ -/'
@@ -35,6 +35,8 @@ spark:  ## PySpark aggregates -> spark_marts.*
 	$(ENV) python -m spark.run_all
 stream:  ## Kafka simulator + consumer (see streaming/README)
 	$(ENV) python -m streaming.run
+e2e:  ## one command: services + full pipeline + streaming + docs/RESULTS.md
+	scripts/e2e_run.sh
 pipeline: acquire load geo dbt quality spark  ## full batch pipeline, natively
 demo:  ## small-slice end-to-end run (minutes)
 	SAMPLE_MODE=1 $(MAKE) pipeline
