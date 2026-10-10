@@ -18,3 +18,5 @@ warehouse/logs/
 logs/
 *.log
 spark-warehouse/
+.venv-airflow/
+.airflow/
