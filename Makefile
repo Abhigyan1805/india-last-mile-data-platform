@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 ENV := source scripts/env.sh &&
-.PHONY: help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
+.PHONY: warehouse-sample help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
 
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | sed 's/:.*##/ -/'
@@ -41,3 +41,6 @@ lint:
 	$(ENV) ruff check . && ruff format --check .
 test:
 	$(ENV) pytest -q
+
+warehouse-sample:  ## warehouse on the tiny fixture (own DB warehouse_sample): load -> dbt build -> quality; set PGPORT if not 5433
+	$(ENV) export PGDATABASE=warehouse_sample && python -m warehouse.load_sample && (cd warehouse && dbt build --full-refresh --profiles-dir .) && python -m warehouse.quality

@@ -1,0 +1,11 @@
+circlename,regionname,divisionname,officename,pincode,officetype,delivery,district,statename,latitude,longitude
+Circle,Region,Division,Bangalore GPO,560001,PO,Delivery,Bengaluru Urban,KARNATAKA,12.9763,77.6033
+Circle,Region,Division,Cubbon Park SO,560001,PO,Delivery,Bengaluru Urban,KARNATAKA,12.9779,77.5952
+Circle,Region,Division,Koramangala SO,560034,PO,Delivery,Bengaluru Urban,KARNATAKA,12.9352,77.6245
+Circle,Region,Division,Whitefield SO,560066,PO,Delivery,Bengaluru Urban,KARNATAKA,12.9698,77.75
+Circle,Region,Division,Mumbai GPO,400001,PO,Delivery,Mumbai,MAHARASHTRA,18.9388,72.8354
+Circle,Region,Division,Bandra SO,400051,PO,Delivery,Mumbai,MAHARASHTRA,19.0596,72.8295
+Circle,Region,Division,New Delhi GPO,110001,PO,Delivery,New Delhi,DELHI,28.6358,77.2244
+Circle,Region,Division,Hauz Khas SO,110016,PO,Delivery,South Delhi,DELHI,28.5494,77.2001
+Circle,Region,Division,Chennai GPO,600001,PO,Delivery,Chennai,TAMIL NADU,13.0827,80.2707
+Circle,Region,Division,Parrys SO,600001,PO,Delivery,Chennai,TAMIL NADU,NA,NA

@@ -1,0 +1,15 @@
+id,delivery_person_id,delivery_person_age,delivery_person_ratings,restaurant_latitude,restaurant_longitude,delivery_location_latitude,delivery_location_longitude,order_date,time_orderd,time_order_picked,weather_conditions,road_traffic_density,vehicle_condition,type_of_order,type_of_vehicle,multiple_deliveries,festival,city,time_taken_min
+0x1001,DEHRES01DEL01,30,4.6,28.6358,77.2244,28.5494,77.2001,12-03-2022,11:30:00,11:40:00,conditions Sunny,High ,2,Snack ,motorcycle ,1,No ,Urban ,(min) 24
+0x1002,DEHRES01DEL01,30,4.6,28.6358,77.2244,28.5494,77.2001,13-03-2022,19:20:00,19:25:00,conditions Stormy,Jam ,2,Snack ,motorcycle ,2,Yes ,Urban ,(min) 41
+0x1003,BANGRES02BAN02,30,4.6,12.9352,77.6245,12.9779,77.5952,14-03-2022,08:15:00,08:20:00,conditions Cloudy,Low ,2,Snack ,motorcycle ,0,No ,Urban ,(min) 18
+0x1004,BANGRES02BAN02,30,4.6,12.9352,77.6245,12.9779,77.5952,14-03-2022,13:45:00,13:55:00,conditions Fog,Medium ,2,Snack ,motorcycle ,1,No ,Urban ,(min) 27
+0x1005,MUMRES03MUM03,30,4.6,18.9388,72.8354,19.0596,72.8295,15-03-2022,20:00:00,20:10:00,conditions Sandstorms,High ,2,Snack ,motorcycle ,1,No ,Urban ,(min) 36
+0x1006,MUMRES03MUM03,30,4.6,18.9388,72.8354,19.0596,72.8295,16-03-2022,21:30:00,21:35:00,conditions Windy,Low ,2,Snack ,motorcycle ,0,Yes ,Urban ,(min) 22
+0x1007,CHENRES04CHE04,30,4.6,13.0827,80.2707,13.0827,80.2707,17-03-2022,07:50:00,07:55:00,conditions Sunny,Low ,2,Snack ,motorcycle ,0,No ,Urban ,(min) 15
+0x1008,CHENRES04CHE04,30,4.6,13.0827,80.2707,13.0827,80.2707,18-03-2022,12:10:00,12:20:00,conditions Sunny,Medium ,2,Snack ,motorcycle ,2,No ,Urban ,(min) 30
+0x1001,DEHRES01DEL01,30,4.6,28.6358,77.2244,28.5494,77.2001,12-03-2022,11:30:00,11:40:00,conditions Sunny,High ,2,Snack ,motorcycle ,1,No ,Urban ,(min) 24
+0x1009,DEHRES01DEL01,30,4.6,28.6358,77.2244,28.5494,77.2001,NaN,11:30:00,11:40:00,conditions Sunny,Low ,2,Snack ,motorcycle ,1,No ,Urban ,(min) 20
+0x1010,BANGRES02BAN02,30,4.6,12.9352,77.6245,12.9779,77.5952,19-03-2022,NaN,NaN,conditions Sunny,Low ,2,Snack ,motorcycle ,0,No ,Urban ,(min) 19
+0x1011,MUMRES03MUM03,30,4.6,18.9388,72.8354,19.0596,72.8295,20-03-2022,10:00:00,10:10:00,conditions Sunny,Low ,2,Snack ,motorcycle ,0,No ,Urban ,NaN
+0x1012,CHENRES04CHE04,30,4.6,13.0827,80.2707,13.0827,80.2707,20-03-2022,16:00:00,16:10:00,conditions Sunny,Low ,2,Snack ,motorcycle ,0,No ,Urban ,(min) 400
+0x1013,DEHRES01DEL01,30,4.6,-12.97,-77.59,13.0,77.6,21-03-2022,10:00:00,10:10:00,conditions Sunny,Low ,2,Snack ,motorcycle ,0,No ,Urban ,(min) 25

@@ -1,0 +1,25 @@
+version: 2
+models:
+  - name: stg_amazon_deliveries
+    columns:
+      - name: _load_id
+        data_tests: [not_null]
+  - name: stg_zomato_deliveries
+    columns:
+      - name: _load_id
+        data_tests: [not_null]
+  - name: stg_pincodes
+    columns:
+      - name: pincode
+        data_tests: [not_null]
+  - name: stg_delivery_geo
+    columns:
+      - name: order_id
+        data_tests: [not_null]
+      - name: source
+        data_tests:
+          - accepted_values: {arguments: {values: [amazon, zomato]}}
+  - name: stg_city_ref
+    columns:
+      - name: city
+        data_tests: [not_null, unique]
