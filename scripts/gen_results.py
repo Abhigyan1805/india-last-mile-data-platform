@@ -7,13 +7,6 @@ from pathlib import Path
 
 from ingest.common import ROOT, connect
 
-COUNT_SQL = (
-    "SELECT table_schema||'.'||table_name, (xpath('/row/c/text()', query_to_xml("
-    "'select count(*) c from '||table_schema||'.'||table_name,false,true,'')))[1]::text "
-    "FROM information_schema.tables WHERE table_schema IN ('analytics','spark_marts') "
-    "AND table_type='BASE TABLE' ORDER BY 1"
-)
-
 
 def q(cur, sql: str) -> list[tuple]:
     try:
@@ -41,10 +34,9 @@ SECTIONS = [
         FROM raw.delivery_geo GROUP BY 1,2 ORDER BY 1,2""",
      ["source", "point", "points", "matched", "match %", "avg km to pincode"]),
     ("Data-quality checks (failing rows caught)", """SELECT layer, check_name, dataset, rows_checked, rows_failed
-        FROM quality.check_results WHERE run_id IN (SELECT run_id FROM quality.check_results
-        GROUP BY run_id ORDER BY max(run_ts) DESC LIMIT 2) ORDER BY layer, check_name, dataset""",
-     ["layer", "check", "dataset", "rows checked", "rows failed"]),
-    ("Warehouse row counts", COUNT_SQL, ["table", "rows"]),
+        FROM quality.check_results c WHERE run_ts = (SELECT max(run_ts) FROM quality.check_results
+        WHERE layer = c.layer AND check_name = c.check_name AND dataset = c.dataset)
+        ORDER BY layer, check_name, dataset""", ["layer", "check", "dataset", "rows checked", "rows failed"]),
     ("Streaming (SIMULATED events)", """SELECT load_id, produced, consumed, landed, duplicates_dropped, late_events,
         out_of_bounds, malformed, round(duration_s::numeric,1), round(events_per_s::numeric)
         FROM raw.stream_runs ORDER BY produced DESC NULLS LAST LIMIT 1""",
@@ -73,12 +65,20 @@ def main() -> None:
           "`scripts/e2e_run.sh` (native runtime, no Docker). Every number is queried from the warehouse.\n"]
     for title, sql, hdr in SECTIONS:
         md.append(f"\n## {title}\n" + table(q(cur, sql), hdr))
+    cur.execute("SELECT table_schema, table_name FROM information_schema.tables WHERE table_schema IN "
+                "('analytics','spark_marts') AND table_type='BASE TABLE' ORDER BY 1,2")
+    counts = []
+    for schema, name in cur.fetchall():
+        cur.execute(f'SELECT count(*) FROM "{schema}"."{name}"')
+        counts.append((f"{schema}.{name}", cur.fetchone()[0]))
+    md.append("\n## Warehouse row counts\n" + table(counts, ["table", "rows"]))
     timings = [ln.split("\t") for ln in (data / "e2e_timings.tsv").read_text().splitlines() if ln]
     total = (data / "e2e_total_s").read_text().strip()
     md.append("\n## Runtime (seconds per step)\n" + table(timings, ["step", "seconds"])
               + f"\n\n**Total wall clock: {total} s**\n")
-    (ROOT / "docs" / "RESULTS.md").write_text("\n".join(md))
-    print("wrote docs/RESULTS.md")
+    out = Path(os.environ.get("RESULTS_OUT", ROOT / "docs" / "RESULTS.md"))
+    out.write_text("\n".join(md))
+    print(f"wrote {out}")
 
 
 if __name__ == "__main__":

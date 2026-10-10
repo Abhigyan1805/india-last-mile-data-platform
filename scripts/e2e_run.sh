@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 EVENTS=1000000
 while [ $# -gt 0 ]; do
-  case "$1" in --sample) export SAMPLE_MODE=1; EVENTS=20000;; --events) EVENTS="$2"; shift;; esac; shift
+  case "$1" in --sample) export SAMPLE_MODE=1 RESULTS_OUT="$PWD/docs/RESULTS_SAMPLE.md"; EVENTS=20000;; --events) EVENTS="$2"; shift;; esac; shift
 done
 source scripts/env.sh
 export LOAD_ID="${LOAD_ID:-$(date +%Y%m%dT%H%M%S)}"
@@ -23,10 +23,10 @@ step acquire python -m ingest.acquire
 step load_raw python -m ingest.load
 step geo_enrich python -m ingest.geo
 step weather python -m ingest.weather
-step dbt_build bash -c 'cd warehouse && dbt build --profiles-dir .'
+step dbt_build bash -c 'cd warehouse && dbt build --profiles-dir . ${SAMPLE_MODE:+--full-refresh}'
 step quality python -m warehouse.quality
 step spark python -m spark.run_all
 step streaming python -m streaming.run --events "$EVENTS"
 echo "$(( $(date +%s) - T0 ))" > "$DATA_DIR/e2e_total_s"
 python scripts/gen_results.py
-echo "e2e complete in $(cat "$DATA_DIR/e2e_total_s")s -> docs/RESULTS.md"
+echo "e2e complete in $(cat "$DATA_DIR/e2e_total_s")s -> ${RESULTS_OUT:-docs/RESULTS.md}"

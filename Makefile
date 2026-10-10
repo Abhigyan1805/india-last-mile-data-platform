@@ -43,8 +43,8 @@ stream:  ## Kafka simulator + consumer (see streaming/README)
 e2e:  ## one command: services + full pipeline + streaming + docs/RESULTS.md
 	scripts/e2e_run.sh
 pipeline: acquire load geo dbt quality spark  ## full batch pipeline, natively
-demo:  ## small-slice end-to-end run (minutes)
-	SAMPLE_MODE=1 $(MAKE) pipeline
+demo:  ## small-slice end-to-end run (~70 s) -> docs/RESULTS_SAMPLE.md
+	scripts/e2e_run.sh --sample
 lint:
 	$(ENV) ruff check .
 test:

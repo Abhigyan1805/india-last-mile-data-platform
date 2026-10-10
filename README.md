@@ -36,7 +36,7 @@ Native (what produced the recorded results; no Docker needed):
 ```bash
 make setup           # venv, pinned deps, JDK + Kafka into .tools/ (needs: uv, ~/.kaggle/access_token)
 make e2e             # starts services, runs everything, writes docs/RESULTS.md, stops services
-make demo            # small-slice run (a few minutes) for a quick look
+make demo            # small-slice run (~70 s, 2,000 rows per source, 20k events; writes docs/RESULTS_SAMPLE.md) for a quick look
 ```
 Docker (reviewer path; `docker-compose.yml`, **not executed by the author - Docker was unavailable on the build machine**):
 ```bash
@@ -66,9 +66,26 @@ Raw files are gitignored; `ingest.acquire` is idempotent.
 
 ## Results
 
-See [`docs/RESULTS.md`](docs/RESULTS.md) for the full generated tables: warehouse row counts, quality-check failures
-caught, Spark findings (delay by weather / traffic / festival, city comparison, busiest pincode-hours, courier
-utilisation), streaming throughput and per-step runtime. *(Final numbers inserted after the recorded run.)*
+From one recorded end-to-end run (`make e2e`, native, 344 s wall clock; full tables in
+[`docs/RESULTS.md`](docs/RESULTS.md), all queried from the warehouse):
+
+| Metric | Result |
+|---|---|
+| Delivery rows ingested | 43,739 Amazon India + 45,584 Zomato = **89,323** (plus 165,627 pincode offices, 1,320 weather city-days) |
+| Pincode match rate | **91.38%** of 178,646 pickup/drop points within 10 km of an India Post pincode |
+| Batch quality failures caught | 7,764 coordinates outside India, 8,238 unmatched-to-pincode, 5,890 unparseable timestamps; 0 duplicate order ids and 0 negative/absurd delivery times in the real data; **12,852 of 89,323 (14.4%)** rows flagged invalid in `fct_deliveries` |
+| Streaming (simulated) | **1,000,000** events produced; 973,543 landed; caught 19,577 duplicates, 9,760 late GPS pings, 4,897 out-of-bounds GPS, 1,983 malformed (36,217 bad events) at ~7,400 events/s consumed |
+| Runtime | ingest + geo ~16 s, dbt build 13 s (52 models/tests), Spark 32 s (four marts, 8,406 rows), streaming step 268 s |
+
+Business findings (Zomato, valid rows; Spark marts):
+* **Festival days add ~19.5 min** to a delivery (45.5 vs 26.0 min, 708 festival deliveries).
+* **Traffic matters most**: "Jam" averages 31.2 min vs 21.3 min in low traffic (+9.9 min, +46%).
+* **Rain barely moves the needle** in this data: heavy rain +2.3 min (only 58 deliveries), moderate none - an honest
+  null result; the source's own weather label (cloudy/fog +7 min vs sunny) shows a larger effect.
+* **Couriers are under-utilised**: mean utilisation (busy time / on-shift time) 34.6%, median 30.7%.
+* **Amazon India deliveries are slow** (about 125 min average, ~94% over 45 min in every city) vs ~26 min for food delivery.
+* Caveat: the Kaggle sets look partly synthetic (many deliveries snap to the same few pincodes, e.g. 453771 Indore peaks),
+  so treat business findings as demonstrations of the pipeline, not market truths.
 
 ## What is real vs simulated
 

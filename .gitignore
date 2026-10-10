@@ -20,3 +20,4 @@ logs/
 spark-warehouse/
 .venv-airflow/
 .airflow/
+docs/RESULTS_SAMPLE.md
