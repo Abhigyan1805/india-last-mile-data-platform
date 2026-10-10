@@ -33,6 +33,11 @@ quality:  ## custom quality checks -> quality.check_results
 	$(ENV) python -m warehouse.quality
 spark:  ## PySpark aggregates -> spark_marts.*
 	$(ENV) python -m spark.run_all
+spark-sample:  ## Spark marts from the in-memory sample fixture (no Postgres needed)
+	$(ENV) python -m spark.run_all --sample --no-write
+spark-test:  ## Spark job tests on tiny fixtures (local SparkSession)
+	$(ENV) pytest -q tests/spark
+.PHONY: spark-sample spark-test
 stream:  ## Kafka simulator + consumer (see streaming/README)
 	$(ENV) python -m streaming.run
 e2e:  ## one command: services + full pipeline + streaming + docs/RESULTS.md
