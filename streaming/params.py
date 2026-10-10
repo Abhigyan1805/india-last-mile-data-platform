@@ -145,11 +145,11 @@ def _db_overlays(dsn: str) -> dict[str, Any]:
             try:
                 cur.execute(
                     "SELECT factor_value, avg_delivery_min FROM spark_marts.delay_impact "
-                    "WHERE factor = 'traffic' AND avg_delivery_min IS NOT NULL"
+                    "WHERE factor = 'traffic' AND source = 'zomato' AND avg_delivery_min IS NOT NULL"
                 )
                 rows = cur.fetchall()
                 if rows:
-                    out["traffic_base_min"] = {str(k): float(v) for k, v in rows if v is not None}
+                    out["traffic_base_min"] = {str(k).strip().title(): float(v) for k, v in rows if v is not None}
                     out["_delivery_source"] = "spark_marts.delay_impact"
             except Exception:
                 pass
