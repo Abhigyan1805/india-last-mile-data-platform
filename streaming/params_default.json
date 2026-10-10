@@ -1,0 +1,49 @@
+{
+  "_comment": "Fallback simulation parameters used when analytics.*/spark_marts.* are not available. Regenerable by ingest/warehouse (see docs/streaming.md). All values are deliberately labelled simulated.",
+  "city": "Bengaluru",
+  "center_lat": 12.9716,
+  "center_lon": 77.5946,
+  "spread_deg": 0.11,
+  "driver_pool": 600,
+  "daily_orders": 6000,
+  "vehicle_mix": {
+    "two_wheeler": 0.78,
+    "truck": 0.22
+  },
+  "hour_demand_weights": [
+    1, 1, 1, 1, 1, 2, 4, 8, 14, 12, 8, 9,
+    13, 11, 8, 7, 9, 12, 16, 20, 22, 18, 10, 3
+  ],
+  "traffic_base_min": {
+    "Low": 18.0,
+    "Medium": 28.0,
+    "High": 40.0,
+    "Jam": 55.0
+  },
+  "weather_multiplier": {
+    "Sunny": 1.0,
+    "Cloudy": 1.05,
+    "Windy": 1.1,
+    "Fog": 1.2,
+    "Sandstorms": 1.25,
+    "Stormy": 1.35
+  },
+  "gps_ping_interval_s": {
+    "two_wheeler": 4.0,
+    "truck": 6.0
+  },
+  "speed_kmh": {
+    "two_wheeler": 22.0,
+    "truck": 16.0
+  },
+  "dispatch_delay_s": [30, 180],
+  "pickup_delay_s": [60, 420],
+  "inject_rates": {
+    "duplicate": 0.02,
+    "late": 0.01,
+    "out_of_bounds": 0.005,
+    "malformed": 0.002
+  },
+  "allowed_lateness_s": 300,
+  "ping_jitter_s": 1.5
+}
