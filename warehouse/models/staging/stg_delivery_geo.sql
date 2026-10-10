@@ -1,8 +1,11 @@
 {# Nearest-pincode enrichment from ingest/geo.py, pivoted to one row per order with pickup_* and drop_* columns.
    Only the latest _load_id per source is used (ingest keeps older runs out, this is belt and braces). #}
-with latest as (
-    select * from {{ source('raw', 'delivery_geo') }} g
-    where _load_id = (select max(_load_id) from {{ source('raw', 'delivery_geo') }} where source = g.source)
+with newest as (
+    select source, max(_load_id) as _load_id from {{ source('raw', 'delivery_geo') }} group by source
+),
+latest as (
+    select g.* from {{ source('raw', 'delivery_geo') }} g
+    join newest using (source, _load_id)
 )
 select
     source, order_id,
