@@ -1,0 +1,13 @@
+# Connection comes from the env vars in scripts/env.sh (docs/CONTRACTS.md section 2).
+ilm:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PGHOST', '127.0.0.1') }}"
+      port: "{{ env_var('PGPORT', '5433') | int }}"
+      user: "{{ env_var('PGUSER', 'ilm') }}"
+      password: "{{ env_var('PGPASSWORD', 'ilm') }}"
+      dbname: "{{ env_var('PGDATABASE', 'warehouse') }}"
+      schema: analytics
+      threads: 2

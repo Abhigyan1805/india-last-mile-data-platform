@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 export LOAD_ID ?= $(shell date +%Y%m%dT%H%M%S)
 ENV := source scripts/env.sh &&
-.PHONY: e2e help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
+.PHONY: e2e warehouse-sample help up down native-up native-down setup acquire load geo dbt quality spark stream pipeline demo lint test
 
 help:  ## list targets
 	@grep -E '^[a-z-]+:.*##' Makefile | sed 's/:.*##/ -/'
@@ -44,3 +44,6 @@ lint:
 	$(ENV) ruff check .
 test:
 	$(ENV) pytest -q
+
+warehouse-sample:  ## warehouse on the tiny fixture (own DB warehouse_sample): load -> dbt build -> quality; set PGPORT if not 5433
+	$(ENV) export PGDATABASE=warehouse_sample && python -m warehouse.load_sample && (cd warehouse && dbt build --full-refresh --profiles-dir .) && python -m warehouse.quality

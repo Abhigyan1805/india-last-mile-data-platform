@@ -1,0 +1,14 @@
+order_id,agent_age,agent_rating,store_latitude,store_longitude,drop_latitude,drop_longitude,order_date,order_time,pickup_time,weather,traffic,vehicle,area,delivery_time,category
+A001,28,4.7,12.9352,77.6245,12.9779,77.5952,2022-03-15,08:30:00,08:40:00,Sunny,High ,motorcycle ,Urban ,30,Snack
+A002,28,4.7,12.9352,77.6245,12.9779,77.5952,2022-03-15,13:05:00,13:15:00,Cloudy,Medium ,motorcycle ,Urban ,25,Snack
+A003,28,4.7,18.9388,72.8354,19.0596,72.8295,2022-03-16,19:10:00,19:20:00,Stormy,Jam ,motorcycle ,Urban ,55,Snack
+A004,28,4.7,18.9388,72.8354,19.0596,72.8295,2022-03-16,09:00:00,09:10:00,Sunny,Low ,motorcycle ,Urban ,20,Snack
+A005,28,4.7,28.6358,77.2244,28.5494,77.2001,2022-03-17,21:45:00,21:50:00,Fog,Medium ,motorcycle ,Urban ,40,Snack
+A006,28,4.7,28.6358,77.2244,28.5494,77.2001,2022-03-17,12:00:00,12:10:00,Sunny,High ,motorcycle ,Urban ,35,Snack
+A007,28,4.7,13.0827,80.2707,13.0827,80.2707,2022-03-18,18:30:00,18:35:00,Sandstorms,Low ,motorcycle ,Urban ,28,Snack
+A008,28,4.7,12.9352,77.6245,12.9779,77.5952,2022-03-18,23:50:00,00:05:00,Windy,Low ,motorcycle ,Urban ,45,Snack
+A001,28,4.7,12.9352,77.6245,12.9779,77.5952,2022-03-15,08:30:00,08:40:00,Sunny,High ,motorcycle ,Urban ,30,Snack
+A009,28,4.7,12.9352,77.6245,12.9779,77.5952,2022-03-19,10:00:00,10:10:00,Sunny,Low ,motorcycle ,Urban ,-5,Snack
+A010,28,4.7,18.9388,72.8354,19.0596,72.8295,2022-03-19,11:00:00,11:10:00,Sunny,Low ,motorcycle ,Urban ,999,Snack
+A011,28,4.7,28.6358,77.2244,28.5494,77.2001,2022-03-20,14:00:00,14:10:00,NaN,NaN,motorcycle ,Urban ,33,Snack
+A012,30,4.5,0.0,0.0,0.0,0.0,2022-03-20,15:00:00,15:10:00,Sunny,Low ,scooter ,Metropolitian ,30,Food
