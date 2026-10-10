@@ -49,7 +49,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--mode", choices=("both", "produce", "consume"), default="both", help="run stage(s)"
     )
-    parser.add_argument("--partitions", type=int, default=3)
+    parser.add_argument(
+        "--partitions",
+        type=int,
+        default=1,
+        help="topic partitions; 1 keeps global event-time order so watermark "
+        "lateness reflects only injected late events (default 1)",
+    )
     parser.add_argument("--idle-timeout", type=float, default=20.0)
     parser.add_argument("--params", default=None, help="override params JSON path")
     parser.add_argument("--json-out", default=None, help="write the run summary JSON here")

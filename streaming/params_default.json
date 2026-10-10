@@ -5,6 +5,7 @@
   "center_lon": 77.5946,
   "spread_deg": 0.11,
   "driver_pool": 600,
+  "daily_orders": 6000,
   "vehicle_mix": {
     "two_wheeler": 0.78,
     "truck": 0.22

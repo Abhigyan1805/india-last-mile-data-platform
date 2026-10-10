@@ -20,3 +20,13 @@ CREATE TABLE IF NOT EXISTS raw.stream_runs (
   duplicates_dropped bigint, late_events bigint, out_of_bounds bigint, malformed bigint,
   duration_s double precision, events_per_s double precision
 );
+
+-- Owned by warehouse/ingest (see CONTRACTS section 5); created here so a
+-- standalone streaming run can record its stream checks.
+CREATE TABLE IF NOT EXISTS quality.check_results (
+  run_id text NOT NULL, run_ts timestamptz NOT NULL DEFAULT now(),
+  layer text NOT NULL,          -- 'batch' | 'stream'
+  check_name text NOT NULL, dataset text NOT NULL,
+  rows_checked bigint, rows_failed bigint NOT NULL, details jsonb,
+  PRIMARY KEY (run_id, check_name, dataset)
+);

@@ -86,7 +86,10 @@ class StreamProcessor:
     def __init__(self, allowed_lateness_s: float = 300.0) -> None:
         self.allowed_lateness_s = float(allowed_lateness_s)
         self.seen: set[str] = set()
-        self.max_event_ts: float = float("-inf")
+        # Watermarks are per input stream (topic): the lifecycle and GPS topics
+        # are independent, so a global watermark would mis-flag anything that
+        # arrives interleaved between them.
+        self.max_event_ts: dict[str, float] = {}
         # counters (mirrored into raw.stream_runs / quality.check_results)
         self.consumed = 0
         self.landed = 0
@@ -98,7 +101,7 @@ class StreamProcessor:
         self.geolocated = 0
 
     # -- core ----------------------------------------------------------------
-    def process(self, raw: bytes | str) -> Decision:
+    def process(self, raw: bytes | str, topic: str = "stream") -> Decision:
         self.consumed += 1
 
         event = self._parse(raw)
@@ -113,7 +116,8 @@ class StreamProcessor:
         self.seen.add(event_id)
 
         event_ts = event["_event_ts"]
-        self.max_event_ts = max(self.max_event_ts, event_ts)
+        watermark = max(self.max_event_ts.get(topic, float("-inf")), event_ts)
+        self.max_event_ts[topic] = watermark
 
         lat, lon = event.get("lat"), event.get("lon")
         if lat is not None and lon is not None:
@@ -122,7 +126,7 @@ class StreamProcessor:
                 self.out_of_bounds += 1
                 return Decision(action="reject", reason="out_of_bounds", event=event)
 
-        is_late = event_ts < (self.max_event_ts - self.allowed_lateness_s)
+        is_late = event_ts < (watermark - self.allowed_lateness_s)
         if is_late:
             self.late += 1
         if event["event_type"] == "gps_ping":

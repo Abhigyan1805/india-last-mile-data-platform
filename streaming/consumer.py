@@ -49,7 +49,7 @@ def consume(
                 for records in batches.values():
                     for record in records:
                         now = time.time()
-                        decision = processor.process(record.value)
+                        decision = processor.process(record.value, topic=record.topic)
                         if decision.landed:
                             sink.land(decision.event, decision.is_late, now)
                         else:
