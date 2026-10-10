@@ -41,3 +41,16 @@ lint:
 	$(ENV) ruff check . && ruff format --check .
 test:
 	$(ENV) pytest -q
+
+# --- streaming/ (own native runtimes on non-default ports; see docs/streaming.md) ---
+.PHONY: stream-up stream-down stream-test stream-million
+stream-up:  ## start streaming's isolated Kafka (9094/9095) + Postgres (5436)
+	streaming/kafka_stream.sh start
+	PGPORT=5436 streaming/native_pg.sh start
+stream-down:  ## stop streaming's isolated Kafka + Postgres
+	-streaming/kafka_stream.sh stop
+	-PGPORT=5436 streaming/native_pg.sh stop
+stream-test:  ## streaming unit tests (validation/dedup; no Kafka required)
+	$(ENV) pytest -q tests/streaming
+stream-million:  ## stream ~1,000,000 simulated events end-to-end on the native stack
+	export KAFKA_BOOTSTRAP=127.0.0.1:9094 PGPORT=5436; $(ENV) python -m streaming.run --events 1000000
