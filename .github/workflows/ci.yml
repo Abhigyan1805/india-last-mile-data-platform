@@ -16,9 +16,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: "17"}
       - run: pip install -e '.[dev]'
       - run: ruff check .
       - run: pytest -q
       - name: dbt parse
-        run: cd warehouse && dbt deps --profiles-dir . || true; cd warehouse && dbt parse --profiles-dir .
+        run: cd warehouse && dbt parse --profiles-dir .
         env: {PGHOST: 127.0.0.1, PGPORT: "5433", PGUSER: ilm, PGPASSWORD: ilm, PGDATABASE: warehouse}
